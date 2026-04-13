@@ -13,9 +13,18 @@ const getBooks = async (req, res) => {
   
 }
 
-// const getBookId = async (req, res) => {
+const getBookId = async (req, res) => {
+  try {
+    const id = req.params.id
+    const book = await Book.findById(id).populate("author", "name country birthDate")
 
-// }
+    res.status(200).json(book)
+  } catch(err) {
+    console.log(err);
+    
+  }
+
+}
 
 const createBook = async (req, res) => {
   try {
@@ -35,10 +44,37 @@ const createBook = async (req, res) => {
   
 }
 
+const updateBook = async (req, res) => {
+  try {
+    const id = req.params.id
+    const updatedBook = await Book.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true
+    })
+    res.status(201).json(updatedBook)
+  } catch(err) {
+    console.log(err);
+    
+  }
+  
+}
+
+const deleteBook = async (req, res) => {
+  try {
+    const id = req.params.id
+    const deletedBook = await Book.findByIdAndDelete(id)
+
+    res.status(200).json(deletedBook)
+  } catch(err) {
+    console.log(err);
+    
+  }
+}
+
 module.exports = {
   getBooks,
-  // getBookId,
+  getBookId,
   createBook,
-  // updateBook,
-  // deleteBook
+  updateBook,
+  deleteBook
 }
